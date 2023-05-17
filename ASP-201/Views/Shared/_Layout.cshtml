@@ -1,0 +1,179 @@
+﻿@using ASP_201.Data.Entity
+@using System.Security.Claims;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ASP_201</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ASP-201.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ASP_201</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Forum" asp-action="Index">Forum</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            @* if (Context.Items["AuthUser"] is User authUser) *@
+            @if(Context.User.Identity is not null && Context.User.Identity.IsAuthenticated)
+            {
+                string userId =
+                    Context.User.Claims.First(c => c.Type == ClaimTypes.Sid).Value;
+
+                string userAvatar =
+                    Context.User.Claims
+                    .First(c => c.Type == ClaimTypes.UserData)
+                    .Value;
+
+                if (string.IsNullOrEmpty(userAvatar)) userAvatar = "no-avatar.png";
+
+                string userLogin = 
+                    Context.User.Claims
+                    .First(c => c.Type == ClaimTypes.NameIdentifier)
+                    .Value;
+
+                string isConfirmed =
+                    Context.User.Claims
+                    .First(c => c.Type == "IsConfirmed")
+                    .Value;
+
+                <a asp-controller="User" asp-action="Profile" asp-route-id="@userLogin">
+                    <img src="~/avatars/@(userAvatar)"
+                         alt="Ava"
+                         title="@(string.IsNullOrEmpty(isConfirmed) ? userLogin : "Email не підтверджено")"
+                         style="max-width:40px; max-height:40px; border-radius: 50%"
+                         class="@(string.IsNullOrEmpty(isConfirmed) ? "no-filter" : "filter-color-scarlet")" />
+                </a>
+
+                 <a asp-controller="User" asp-action="Logout" class="mx-3" title="Вийти" data-user-sid="@userId">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
+                        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+                    </svg>
+                 </a>
+            }
+            else 
+            {
+                <button title="Log in" type="button" class="btn btn-outline-primary mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                        <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                    </svg>
+                </button>
+            }
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - ASP_201 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <!--Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-controller="User" asp-action="AuthUser" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Автентифікація</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="auth-reject" class="visually-hidden" style="color: #dc3545"></div>
+                        <div class="form-group">
+                            <label for="user-login">Логін</label>
+                            <input type="text" id="user-login" 
+                                   name="user-login"
+                                   class="form-control" 
+                                   placeholder="Введіть свій логін" />
+                        </div>
+                        <div class="form-group">
+                            <label for="user-password">Пароль</label>
+                            <input type="password" id="user-password" 
+                                   name="user-password"
+                                   class="form-control" 
+                                   placeholder="Введіть свій пароль" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+                        <button type="button" class="btn btn-primary" id="login-button">Вхід</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loginButton = document.getElementById("login-button");
+            if(!loginButton) throw "login-button not found";
+            loginButton.addEventListener("click", loginButtonClick)
+        });
+        function loginButtonClick() {
+            const loginInput = document.getElementById("user-login");
+            if(!loginInput) throw "user-login input not found";
+            const login = loginInput.value;
+
+            const passwordInput = document.getElementById("user-password");
+            if (!passwordInput) throw "user-password input not found";
+            const password = passwordInput.value;
+            
+            const rejectAuth= document.getElementById("auth-reject");
+            
+            window.fetch("/User/AuthUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `user-login=${login}&user-password=${password}`
+            })
+            .then(r => r.text())
+            .then(t => {
+                console.log(t);
+                if(t === "OK") {
+                    // оновлюємо сторінку для авторизації
+                    rejectAuth.classList.add("visually-hidden");
+                    window.location.reload();
+                }
+                else {
+                    
+                    rejectAuth.innerText = t;
+                    console.log("else");
+                    rejectAuth.classList.remove("visually-hidden");
+                }
+            });
+        }
+    </script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

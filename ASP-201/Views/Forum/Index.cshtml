@@ -1,0 +1,52 @@
+﻿@using ASP_201.Models.Forum
+@model ASP_201.Models.Forum.ForumIndexModel
+@{
+    ViewData["Title"] = "Forum";
+}
+
+<div>
+    <h1 class="display-4">Форум</h1>
+</div>
+
+<div class="row">
+    <div class="col col-8">
+        @foreach(var Section in Model.Sections)
+        {
+            @Html.DisplayFor(m => Section, "ForumSection")
+        }
+    </div>
+</div>
+
+@if(Model.UserCanCreate)
+{
+    <div class="row">
+        <div class="col col-6">
+            <h5>Створити новий розділ</h5>
+            @if(Model.CreateMessage is not null)
+            {
+                <h6><strong style='color: @(Model.IsMessagePositive == true ? "green":"red")'>
+                    @Model.CreateMessage
+                </strong></h6>
+            }
+            <form asp-action="CreateSection" method="post" enctype="multipart/form-data" asp-controller="Forum">
+                <div class="form-group">
+                    <label for="Title">Назва</label>
+                    <input type="text" id="section-title" name="section-title" class="form-control" value="@(Model.formModel is null? "" : Model.formModel.Title)" placeholder="Введіть назву розділу" />
+                </div>
+                <div class="form-group">
+                    <label for="section-description"  
+                           сlass="form-label">Опис</label>
+                    <textarea class="form-control" rows="3"
+                              id="section-description"
+                              name="section-description"
+                              placeholder="Введіть опис розділу">@(Model.formModel is null ? "" : Model.formModel.Description)</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="logo-file" class="form-label">Виберіть файл для аватарки</label>
+                    <input name="logo-file" class="form-control" type="file" id="logo-file">
+                </div>
+                <button type="submit" class="btn btn-light m-3">Створити</button>
+            </form>
+        </div>
+    </div>
+}

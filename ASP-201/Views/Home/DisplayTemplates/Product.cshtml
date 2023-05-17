@@ -1,0 +1,10 @@
+﻿@model ASP_201.Models.Home.Product
+
+<div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="/img/@(Model.Image ?? "puc.jpg")" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">@Model.Name</h5>
+    <p class="card-text">Найкращий вибір: @Model.Name всього лише за @Model.Price UAH</p>
+    <a href="#" class="btn btn-primary">Придбати</a>
+  </div>
+</div>

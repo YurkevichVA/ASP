@@ -1,0 +1,25 @@
+﻿@model ASP_201.Models.Forum.ForumTopicViewModel
+
+<div class="col">
+  <div class="card h-100">
+      <div class="card-header">
+            <div class="media d-flex align-items-center">
+                <img src="@Model.AuthorAvatarUrl" class="d-block ui-w-40 rounded-circle" alt="">
+                <div class="media-body mx-2">
+                    <a asp-controller="User" asp-action="Profile" asp-route-id="@Model.AuthorLogin" data-abc="true">@Model.AuthorName</a>
+                    <div class="text-muted small">@Model.CreatedDtString</div>
+                </div>
+                <div class="ms-auto text-muted small mx-2">
+                    <div>Учасник з <strong>@Model.AuthorRegistrationDtString</strong></div>
+                    <div><strong>134</strong> posts</div>
+                </div>
+            </div>
+      </div>
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <p class="card-text">@Model.Description</p>
+            <a asp-action="Topics" asp-route-id="@Model.UrlIdString"
+                class="float-end">Обговорення</a>
+      </div>
+  </div>
+</div>

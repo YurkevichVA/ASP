@@ -1,0 +1,181 @@
+﻿@using ASP_201.Models.User
+
+@model ASP_201.Models.User.RegistrationModel
+
+@{
+    ViewData["Title"] = "Registration";
+    // var registrationModel = ViewData["registrationModel"] as RegistrationModel;
+    var registerValidation = ViewData["registerValidation"] as RegisterValidationModel;
+}
+
+<div>
+    <h1 class="display-4">Реєстрація нового користувача</h1>
+</div>
+
+<form method="post" enctype="multipart/form-data" asp-controller="User" asp-action="Register">
+    <!--
+        Валідація форми засобами bootstrap (https://getbootstrap.com/docs/5.0/forms/validation/#server-side)
+        Звертаємо увагу саме на серверну валідацію.
+        1) елементи форми (input) повинні мати стильові класи
+            is-invalid - червоний стиль, неправильне значення
+            is-valid - зелений стиль, правильне значення
+            жоден з них - початковий стан, без валідації
+        2) Після елементів форми додаються блоки
+            <div class="valid-feedback"> Повідомлення </div>
+            <div class="invalid-feedback"> Повідомлення </div>
+            жодного - початковий стан
+
+
+    -->
+    <div class="form-group">
+        <label asp-for="Login">Логін</label>
+        <!--
+            class="form-control" початковий стан (registerValidation is null)
+            class="form-control is-valid" позитивний результат валідації (registerValidation.LoginMessage is null)
+            class="form-control is-invalid" негативний результат валідації (registerValidation.LoginMessage is not null)
+        -->
+        <input type="text" asp-for="Login" 
+               class="form-control @( registerValidation is null
+                                      ? "" 
+                                      : (registerValidation.LoginMessage is null 
+                                         ? "is-valid" : "is-invalid") )" 
+               placeholder="Оберіть собі логін" />
+
+        @if(registerValidation?.LoginMessage is not null)
+        {
+            <div class="invalid-feedback"> @registerValidation.LoginMessage </div>
+        }
+    </div>
+    <div class="form-group">
+        <label asp-for="Password">Пароль</label>
+        <input type="password" asp-for="Password" class="form-control @( registerValidation is null ? "" : (registerValidation.PasswordMessage is null ? "is-valid" : "is-invalid") )" placeholder="Придумайте пароль" />
+        @if (registerValidation?.PasswordMessage is not null)
+        {
+            <div class="invalid-feedback"> @registerValidation.PasswordMessage </div>
+        }
+    </div>
+    <div class="form-group">
+        <label asp-for="RepeatPassword">Підтвердження паролю</label>
+        <input type="password" asp-for="RepeatPassword" class="form-control @( registerValidation is null ? "" : (registerValidation.RepeatPasswordMessage is null ? "is-valid" : "is-invalid") )" placeholder="Повторіть пароль" />
+        @if (registerValidation?.RepeatPasswordMessage is not null)
+        {
+            <div class="invalid-feedback"> @registerValidation.RepeatPasswordMessage </div>
+        }
+    </div>
+    <div class="form-group">
+        <label asp-for="Email">E-mail</label>
+        <input type="email" asp-for="Email" class="form-control @( registerValidation is null ? "" : (registerValidation.EmailMessage is null ? "is-valid" : "is-invalid") )" placeholder="Введіть ваш e-mail" />
+        @if (registerValidation?.EmailMessage is not null)
+        {
+            <div class="invalid-feedback"> @registerValidation.EmailMessage </div>
+        }
+        <small id="emailHelp" class="form-text text-muted">Ми не передаєм ваш e-mail третім особам без вашої згоди.</small>
+    </div>
+    <div class="form-group">
+        <label asp-for="RealName">Ім'я</label>
+        <input type="text" asp-for="RealName" class="form-control @( registerValidation is null ? "" : (registerValidation.RealNameMessage is null ? "is-valid" : "is-invalid") )" placeholder="Введіть ваше ім'я" />
+        @if (registerValidation?.RealNameMessage is not null)
+        {
+            <div class="invalid-feedback"> @registerValidation.RealNameMessage </div>
+        }
+        <small id="realNameHelp" class="form-text text-muted">Ми не передаєм ваше ім'я третім особам без вашої згоди.</small>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Avatar" class="form-label">Виберіть файл для аватарки</label>
+        <input asp-for="Avatar" class="form-control @( registerValidation is null ? "" : (registerValidation.AvatarMessage is null ? "is-valid" : "is-invalid") )" type="file" id="formFile">
+        @if (registerValidation?.AvatarMessage is not null)
+        {
+            <div class="invalid-feedback"> @registerValidation.AvatarMessage </div>
+        }
+    </div>
+    <div class="form-check">
+        <label class="form-check-label @( registerValidation is null ? "" : (registerValidation.IsAgreeMessage is null ? "is-valid" : "is-invalid") )" asp-for="IsAgree">Погоджуюсь слідувати правилам сайту</label>
+        <input type="checkbox" asp-for="IsAgree" class="form-check-input" />
+        @if (registerValidation?.IsAgreeMessage is not null)
+        {
+            <div class="invalid-feedback"> @registerValidation.IsAgreeMessage </div>
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Реєстрація</button>
+</form>
+
+@*@if (ViewData["registrationModel"] is RegistrationModel registrationModel)
+{
+    // була передача даних
+    <p>
+        Передані дані
+        <br />
+        @registrationModel.Login            <br />
+        @registrationModel.Password         <br />
+        @registrationModel.RepeatPassword   <br />
+        @registrationModel.Email            <br />
+        @registrationModel.RealName         <br />
+    </p>
+}*@
+
+<hr />
+<h2>Щодо HTML форм</h2>
+<hr />
+<p>
+    Що таке форма?
+    Це засіб HTML/бравзера щоб відправляти дані. Форму можно вважати розширенням поняття "посилання", яке окрім переходу на задану адресу також пересилає на неї дані 
+    (долучає дані до запиту, що формується на цю адресу).
+    Відправлення форми, як і перехід за посиланням, руйнує дану сторінку і створює нову з відповіді на запит.
+</p>
+<p>
+    Форма обмежуться тегом &lt;form>, на сторінці може бути довільна кількість форм, кожна форма включає у запить тільки ті дані, що належать її контенту 
+    (між відкритим та закритим тегами). 
+    Кожна форма має свою адресу відправлення, тобто різні форми можуть посилатись на різні адреси.
+</p>
+<p>
+    Спосіб передачі параметрів визначається з атрибутів форми:
+    <br />
+    <b>method</b>: (get (default) або post)
+    <br />
+    <b>enctype</b>: (application/x-www-form-urlencoded (default) або multipart/form-data)
+    <br />
+    method - один з двох методів HTTP запиту (згідно з стандартом https://www.rfc-editor.org/rfc/rfc7231#page-22)
+    З точки зору форм, метод регулює спосіб включення даних до HTTP-пакету:
+    <br />
+    GET: ...?Login=anon&Password=123&...
+    <br />
+    дані включаються безпосередньо в URL, утворюючи секцію "query" (параметрів запиту)
+    <br />
+    POST: такі самі дані (?Login=anon&Password=123&...) включаються у тіло запиту.
+    У складі URL вони не відображаються, для їх аналізу слід відкрити інструент "Network" у консолі бравзера, сфокусуватись на даний запит та відкрити таб "Payload".
+    <br />
+</p>
+<p>
+    Як вибрати метод форми?
+    <br />
+    GET - коли передаються невеликі дані, що не мають секретності.
+    Головна перевага - є можливість створити постійне посилання із певними даними.
+    <br />
+    POST - вважається більш захищеним (насправді лише від зовнішнього погляду).
+    Головна перевага - можливість передавання великих даних, у т.ч. файлів.
+</p>
+<p>
+    Передача файлів за допопмогою форм.
+    <br />
+    HTML форма здатна передавати файли на сервер, але цього необхідно забезпечити деякі умови
+    <br />
+    - у формі мають бути input-и з типом "file"
+    <br />
+    - метод форми - тільки "post"
+    <br />
+    - enctype тільки multipart/form-data
+</p>
+<hr />
+<h2>ASP особливості</h2>
+<p>
+    ASP методи контроллера можуть автоматично "зібрати" об'єкт моделі <u>за збігом імен</u> у класі-моделі та параметрах запиту (query).
+    Для того щоб зв'язування відбулось успішно, необхідно забезпечити однаковість імен полів форми та імен класу-моделі.
+</p>
+<p>
+    Один з найпростіших способів забезпечити такий збіг - це використовувати теґ-помічники з атрибутом asp-for
+</p>
+<p>
+    Прийом файлу від клієнта та його збереження на боці сервера називається "Upload(ing)".
+    Для прийому файлу у моделі форми слід додати поле з типом IFormFile.
+    Подальше зв'язування ASP виконає автоматично (за збігом імен).
+</p>

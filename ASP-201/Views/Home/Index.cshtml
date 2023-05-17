@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+    <h1 class="display-4">ASP</h1>
+</div>
+<h3>
+    <a href="/Home/Intro">Вступ</a>
+</h3>
+<h3>
+    <a href="/Home/Url">URL</a>
+</h3>
+<h3>
+    <a href="/Home/Scheme">Схема взаємодії</a>
+</h3>
+<h3>
+    <a href="/Home/Razor">Основи Razor</a>
+</h3>
+<h3>
+    <a href="/Home/PassData">Моделі передачі даних</a>
+</h3>
+<!--Пряме посилання - не чутливе до змін правил маршрутизації-->
+<h3>
+    <a href="/Home/ProductTable">Таблиця продуктів</a>
+</h3>
+<!--Теґ-помічник сформує посилання за діючим правилом маршрутизації -->
+<h3>
+    <a asp-controller="Home" asp-action="DisplayTemplates">Шаблони відображення</a>
+</h3>
+<!--Незазначені атрибути помічника беруться з оточення-->
+<h3>
+    <a asp-action="TagHelpers">Теґ-помічники</a>
+</h3>
+<h3>
+    <a asp-action="Services">Сервіси (служби)</a>
+</h3>
+<h3>
+    <a asp-action="Context">Контекст даних</a>
+</h3>
+<h3>
+    <a asp-action="Sessions">HTTP - сессії</a>
+</h3>
+<h3>
+    <a asp-action="Middleware">Middleware - ПЗ проміжного рівня</a>
+</h3>
+<h3>
+    <a asp-action="EmailConfirmation">Підтвердження електронної пошти</a>
+</h3>
+<h3>
+    <a asp-action="WebApi">Web API</a>
+</h3>
+<hr />
+<h3>
+    <a asp-controller="User">Сторінка користувача</a>
+</h3>

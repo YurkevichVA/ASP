@@ -1,0 +1,37 @@
+﻿@model ASP_201.Models.Home.ProductsModel
+
+@{
+    ViewData["Title"] = "Товари";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Товари</h1>
+</div>
+
+<table style="border: solid 1px black">
+    <tr>
+        <th>№</th>
+        <th>Назва</th>
+        <th>Ціна</th>
+    </tr>
+    @{ int counter = 1; }
+    @foreach(var product in Model.products){
+        if (counter % 2 == 0)
+        {
+            <tr style="background-color: lightcoral">
+                <td>@counter</td>
+                <td>@product.Name</td>
+                <td>@product.Price.ToString("0.00")</td>
+            </tr>
+        }
+        else
+        {
+            <tr style="background-color: lightgreen">
+                <td>@counter</td>
+                <td>@product.Name</td>
+                <td>@product.Price.ToString("0.00")</td>
+            </tr>
+        }
+        counter++;
+    }
+</table>
